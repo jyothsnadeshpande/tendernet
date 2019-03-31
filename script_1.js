@@ -65,6 +65,11 @@ async function makeOffer(offer) {  // eslint-disable-line no-unused-vars
     if (!listing.offers) {
         listing.offers = [];
     }
+    for (var i = 0; i < listing.offers.length; i++) {
+  if(listing.offers[i].member == offer.member){
+    throw new Error('Your bid has already been submitted');
+  	}
+    }
     listing.offers.push(offer);
 
     // save the vehicle listing
