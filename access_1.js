@@ -17,35 +17,35 @@
  */
 rule Auctioneer {
     description: "Allow the auctioneer full access"
-    participant: "org.acme.vehicle.auction.Auctioneer"
+    participant: "org.acme.tender.auction.Auctioneer"
     operation: ALL
-    resource: "org.acme.vehicle.auction.*"
+    resource: "org.acme.tender.auction.*"
     action: ALLOW
 }
 
 rule Member {
     description: "Allow the member read access"
-    participant: "org.acme.vehicle.auction.Member"
+    participant: "org.acme.tender.auction.Member"
     operation: READ
-    resource: "org.acme.vehicle.auction.*"
+    resource: "org.acme.tender.auction.*"
     action: ALLOW
 }
 
-rule VehicleOwner {
-    description: "Allow the owner of a vehicle total access"
-    participant(m): "org.acme.vehicle.auction.Member"
+rule TenderOwner {
+    description: "Allow the owner of a tender total access"
+    participant(m): "org.acme.tender.auction.Member"
     operation: ALL
-    resource(v): "org.acme.vehicle.auction.Vehicle"
+    resource(v): "org.acme.tender.auction.Tender"
     condition: (v.owner.getIdentifier() == m.getIdentifier())
     action: ALLOW
 }
 
-rule VehicleListingOwner {
-    description: "Allow the owner of a vehicle total access to their vehicle listing"
-    participant(m): "org.acme.vehicle.auction.Member"
+rule TenderListingOwner {
+    description: "Allow the owner of a tender total access to their tender listing"
+    participant(m): "org.acme.tender.auction.Member"
     operation: ALL
-    resource(v): "org.acme.vehicle.auction.VehicleListing"
-    condition: (v.vehicle.owner.getIdentifier() == m.getIdentifier())
+    resource(v): "org.acme.tender.auction.TenderListing"
+    condition: (v.tender.owner.getIdentifier() == m.getIdentifier())
     action: ALLOW
 }
 

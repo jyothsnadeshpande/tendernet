@@ -15,10 +15,10 @@
 /**
  * Defines a data model for a blind vehicle auction
  */
-namespace org.acme.vehicle.auction
+namespace org.acme.tender.auction
 
-asset Vehicle identified by vin {
-  o String vin
+asset Tender identified by tenderid {
+  o String tenderid
   --> Member owner
 }
 
@@ -28,13 +28,13 @@ enum ListingState {
   o CLOSED
 }
 
-asset VehicleListing identified by listingId {
+asset TenderListing identified by listingId {
   o String listingId
   o Double reservePrice
   o String description
   o ListingState state
   o Offer[] offers optional
-  --> Vehicle vehicle
+  --> Tender tender
 }
 
 abstract participant User identified by email {
@@ -52,10 +52,10 @@ participant Auctioneer extends User {
 
 transaction Offer {
   o Double bidPrice
-  --> VehicleListing listing
+  --> TenderListing listing
   --> Member member
 }
 
 transaction CloseBidding {
-  --> VehicleListing listing
+  --> TenderListing listing
 }
