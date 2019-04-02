@@ -1,0 +1,75 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Sample business network definition.
+ */
+namespace org.acme.contract
+
+asset Contract identified by contractId {
+  o String contractId
+  --> Contractor contractor
+  o String value
+  o SubmitDocument[] document optional
+}
+
+enum ContractState{
+  o OPEN
+  o CLOSED
+  o TO_BE_VALIDATED
+  o VALIDATED
+}
+
+abstract participant Validator{
+  o Boolean validated
+}
+
+participant Contractor identified by email{
+  o String email
+  o String firstName
+  o String lastName
+}
+
+participant Engineer identified by email extends Validator{
+  o String email
+  o String firstName
+  o String lastName
+}
+
+participant LabourRep identified by repId extends Validator{
+  o String repId
+  o String firstName
+  o String lastName
+}
+
+participant Department identified by departmentId extends Validator{
+  o String departmentId
+  o String departmentName
+}
+
+participant Supplier identified by companyId extends Validator{
+  o String companyId
+  o String companyName
+}
+
+transaction SubmitDocument {
+  --> Contract contract
+  o String description
+  o Double amount
+  o Boolean validated
+}
+
+transaction CloseContract {
+  --> Contract contract
+}
