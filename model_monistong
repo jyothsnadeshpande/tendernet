@@ -20,7 +20,7 @@ namespace org.acme.contract
 asset Contract identified by contractId {
   o String contractId
   --> Contractor contractor
-  o String value
+  o Double value
   o SubmitDocument[] document optional
 }
 
@@ -36,6 +36,12 @@ abstract participant Validator{
 }
 
 participant Contractor identified by email{
+  o String email
+  o String firstName
+  o String lastName
+}
+
+participant PublicRep identified by email{
   o String email
   o String firstName
   o String lastName
