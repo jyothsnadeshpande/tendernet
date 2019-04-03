@@ -13,52 +13,58 @@
  */
 
 /* global getAssetRegistry getFactory emit */
-
 /**
- * Sample transaction processor function.
- * @param {org.example.basic.SampleTransaction} tx The sample transaction instance.
+ * Submit validations
+ * @param {org.acme.contract.Engineer_Validate} engineerValidate - document validation
  * @transaction
  */
-/* async function sampleTransaction(tx) {  // eslint-disable-line no-unused-vars
-
-    // Save the old value of the asset.
-    const oldValue = tx.asset.value;
-
-    // Update the asset with the new value.
-    tx.asset.value = tx.newValue;
-
-    // Get the asset registry for the asset.
-    const assetRegistry = await getAssetRegistry('org.example.basic.SampleAsset');
-    // Update the asset in the asset registry.
-    await assetRegistry.update(tx.asset);
-
-    // Emit an event for the modified asset.
-    let event = getFactory().newEvent('org.example.basic', 'SampleEvent');
-    event.asset = tx.asset;
-    event.oldValue = oldValue;
-    event.newValue = tx.newValue;
-    emit(event);
-}        */
-
+async function Engineervalidate(engineerValidate){
+	const contract = engineerValidate.contract;
+     
+    for(var i = 0; i < contract.document.length; i++){
+    	
+    }
+    
+      
+    
+  	
+  	
+}
 /**
- * Close the Contract once the project is over
+ * Submit a document
+ * @param {org.acme.contract.SubmitDocument} submitDocument - document to be submitted
+ * @transaction
+ */
+async function submitDocument(submitDocument){
+	const document = submitDocument.document;
+  	if(document.contract.state !== 'OPEN'){
+    	throw new Error('Contract is closed');
+    }
+  	if (!document.contract.documents) {
+        document.contract.documents = [];
+    }  	
+  	document.contract.documents.push(submitDocument);
+  	const documentRegistry = await getAssetRegistry(org.acme.contract.Contract);
+  	await documentRegistry.update(document);
+    
+}
+/**
+ * Close the contract once the project is over
  * @param {org.acme.contract.CloseContract} closeContract - the contract
  * @transaction
  */
-async function closeContract(closeContract) {  
-    const contract=closeContract.contract;
-    if (contract.state !== 'OPEN') {
-        throw new Error('CLOSED ALREADY');
+async function closeContract(closeContract){
+	const contract = closeContract.contract;
+    if(contract.state !== 'OPEN'){
+		throw new Error('Closed Already');
     }
-    closeContract.expenditure = 0;
-    for (var i = 0; i < contract.document.length; i++) {
-        closeContract.expenditure+=contract.document[i].amount;
-    }  
-    closeContract.contract.value = closeContract.expenditure;
-  
-    contract.state = 'CLOSED';
-    
-    const contractAssetRegistry = await getAssetRegistry('org.acme.contract.Contract');
-    await contractAssetRegistry.update(contract);
+  	closeContract.expenditure = 0;
+  	for(var i = 0; i < contract.document.length; i++){
+    	closeContract.expenditure += contract.document[i].amount;
+    }
+  	closeContract.contract.value = closeContract.expenditure;
+  	contract.state = 'CLOSED';
+  	
+  	const contractAssetRegistry = await getAssetRegistry('org.acme.contract.Contract');
+  	await contractAssetRegistry.update(contract);
 }
-
