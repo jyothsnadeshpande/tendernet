@@ -21,18 +21,22 @@ asset Contract identified by contractId {
   o String contractId
   --> Contractor contractor
   o Double value
-  o SubmitDocument[] document optional
+  o SubmitDocument[] documents optional
+  o ContractState state
+}
+
+asset Document identified by documentId{
+  o String documentId
+  o String description
+  o Double amount
+  --> Contract contract
 }
 
 enum ContractState{
   o OPEN
   o CLOSED
-  o TO_BE_VALIDATED
-  o VALIDATED
-}
-
-abstract participant Validator{
-  o Boolean validated
+  o OPEN_FOR_VALIDATION
+  o VALIDATION_OVER
 }
 
 participant Contractor identified by email{
@@ -41,41 +45,54 @@ participant Contractor identified by email{
   o String lastName
 }
 
+participant Engineer identified by email{
+  o String email
+  o String firstName
+  o String lastName
+}
+
+participant LabourRep identified by repId{
+  o String repId
+  o String firstName
+  o String lastName
+}
+
+participant Department identified by departmentId{
+  o String departmentId
+  o String departmentName
+}
+
+participant Supplier identified by companyId{
+  o String companyId
+  o String companyName
+}
+
 participant PublicRep identified by email{
   o String email
   o String firstName
   o String lastName
 }
 
-participant Engineer identified by email extends Validator{
-  o String email
-  o String firstName
-  o String lastName
-}
-
-participant LabourRep identified by repId extends Validator{
-  o String repId
-  o String firstName
-  o String lastName
-}
-
-participant Department identified by departmentId extends Validator{
-  o String departmentId
-  o String departmentName
-}
-
-participant Supplier identified by companyId extends Validator{
-  o String companyId
-  o String companyName
-}
-
 transaction SubmitDocument {
-  --> Contract contract
-  o String description
-  o Double amount
-  o Boolean validated
+  --> Document document
 }
 
 transaction CloseContract {
   --> Contract contract
+  o Double expenditure
+}
+
+transaction Engineer_Validate{
+  -->Contract contract
+  o Integer[] validate optional
+}
+
+transaction Supplier_Validate{
+  -->Contract contract
+  o Integer[] validate optional
+}
+
+transaction LabourRep_Validate{
+  -->Contract contract
+  o Integer[] validate optional
 }
