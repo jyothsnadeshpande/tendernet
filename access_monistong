@@ -19,34 +19,47 @@ rule Contractor {
     description: "Allow the Contractor full access"
     participant: "org.acme.contract.Contractor"
     operation: ALL
-    resource: "org.acme.contract.Contract.*"
-    transaction(tx): "org.acme.contract.CloseContract"
+    resource: "org.acme.contract.*"
     action: ALLOW
 }
 
-rule PublicRep {
-    description: "Allow the PublicRep read access"
-    participant: "org.acme.contract.PublicRep"
-    operation: READ
+rule LabourRep {
+    description: "Allow the LabourRep full access"
+    participant: "org.acme.contract.LabourRep"
+    operation: ALL
     resource: "org.acme.contract.*"
     action: ALLOW
 }
 
 rule Department {
-    description: "Allow the owner of a tender total access"
-    participant(m): "org.acme.contract.Department"
+    description: "Allow the Department full access"
+    participant: "org.acme.contract.Department"
     operation: ALL
-    resource(v): "org.acme.contract.*"
-    //condition: (v.owner.getIdentifier() == m.getIdentifier())
+    resource: "org.acme.contract.*"
     action: ALLOW
 }
 
-rule TenderListingOwner {
-    description: "Allow the owner of a tender total access to their tender listing"
-    participant(m): "org.acme.tender.auction.Member"
+rule PublicRep {
+    description: "Allow the PublicRep full access"
+    participant: "org.acme.contract.PublicRep"
     operation: ALL
-    resource(v): "org.acme.tender.auction.TenderListing"
-    //condition: (v.tender.owner.getIdentifier() == m.getIdentifier())
+    resource: "org.acme.contract.*"
+    action: ALLOW
+}
+
+rule Engineer {
+    description: "Allow the Engineer full access"
+    participant: "org.acme.contract.Engineer"
+    operation: ALL
+    resource: "org.acme.contract.*"
+    action: ALLOW
+}
+
+rule Supplier {
+    description: "Allow the Supplier full access"
+    participant: "org.acme.contract.Supplier"
+    operation: ALL
+    resource: "org.acme.contract.*"
     action: ALLOW
 }
 

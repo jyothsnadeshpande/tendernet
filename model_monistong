@@ -22,6 +22,9 @@ asset Contract identified by contractId {
   --> Contractor contractor
   o Double value
   o SubmitDocument[] documents optional
+  o String engineerValidationStatus optional
+  o String labourRepValidationStatus optional
+  o String supplierValidationStatus optional
   o ContractState state
 }
 
@@ -30,6 +33,24 @@ asset Document identified by documentId{
   o String description
   o Double amount
   --> Contract contract
+}
+
+abstract asset ValidationData {
+  o String[] validation optional
+  o String[] notValidated optional
+  --> Contract contract
+}
+
+asset EngineerValidationData identified by engId extends ValidationData{
+   o String engId
+}
+
+asset LabourRepValidationData identified by labourRepId extends ValidationData{
+   o String labourRepId
+}
+
+asset SupplierValidationData identified by supplierId extends ValidationData{
+   o String supplierId
 }
 
 enum ContractState{
@@ -83,16 +104,22 @@ transaction CloseContract {
 }
 
 transaction Engineer_Validate{
-  -->Contract contract
-  o Integer[] validate optional
+  --> EngineerValidationData engineerValidationData
+  //o String[] validate
+  //o String[] notValidated optional
+  
+  
 }
 
 transaction Supplier_Validate{
-  -->Contract contract
-  o Integer[] validate optional
+ // o String[] validate
+  //o String[] notValidated optional
+  --> SupplierValidationData supplierValidationData
+  
 }
 
 transaction LabourRep_Validate{
-  -->Contract contract
-  o Integer[] validate optional
+  --> LabourRepValidationData laborRepValidationData
+  //o String[] validate 
+  //o String[] notValidated optional
 }
